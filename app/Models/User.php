@@ -46,7 +46,7 @@ class User extends Authenticatable
         ];
     }
 
-    🔽 1対多の関係
+    //🔽 1対多の関係
     public function tweets()
     {
       return $this->hasMany(Tweet::class);
