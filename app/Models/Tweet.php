@@ -26,4 +26,11 @@ class Tweet extends Model
     {
         return $this->hasMany(Comment::class)->orderBy('created_at', 'desc');
     }
+    
+    public function retweetedBy()
+    {
+        return $this->belongsToMany(User::class, 'retweets')->withTimestamps();
+    }
+
+
 }

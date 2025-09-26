@@ -114,4 +114,9 @@ class TweetController extends Controller
 
         return view('tweets.search', compact('tweets'));
     }
+    public function retweetedBy()
+    {
+        return $this->belongsToMany(User::class, 'retweets')->withTimestamps();
+    }
+
 }

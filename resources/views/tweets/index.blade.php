@@ -31,6 +31,24 @@
               </form>
               @endif
             </div>
+            
+            <div class="flex">
+            @if ($tweet->retweetedBy->contains(auth()->id()))
+            <form action="{{ route('tweets.unretweet', $tweet) }}" method="POST">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="text-red-500 hover:text-red-700">unretweet {{$tweet->retweetedBy->count()}}</button>
+            </form>
+            @else
+            <form action="{{ route('tweets.retweet', $tweet) }}" method="POST">
+              @csrf
+              <button type="submit" class="text-blue-500 hover:text-blue-700">retweet {{$tweet->retweetedBy->count()}}</button>
+            </form>
+            @endif
+            <p>リツイート数: {{ $tweet->retweetedBy->count() }}</p>
+            </div>
+            
+
           </div>
           @endforeach
           <!-- ページネーション -->

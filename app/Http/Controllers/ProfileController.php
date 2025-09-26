@@ -9,16 +9,36 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\User;
+use App\Models\Tweet;
 
 class ProfileController extends Controller
 {
     /**
    * Display the specified resource.
    */
-  public function show(User $user)
-  {
-    return view('profile.show', compact('user'));
-  }
+    public function show(User $user)
+    {
+        if (auth()->user()->is($user)) {
+           
+            $tweets = Tweet::where('user_id', $user->id)
+                ->orWhereIn('id', $user->retweets()->pluck('tweet_id'))
+                ->with(['user', 'liked', 'retweetedBy'])
+                ->latest()
+                ->paginate(10);
+        } else {
+           
+            $tweets = Tweet::where('user_id', $user->id)
+                ->orWhereIn('id', $user->retweets()->pluck('tweet_id'))
+                ->with(['user', 'liked', 'retweetedBy'])
+                ->latest()
+                ->paginate(10);
+        }
+    
+        $user->load(['follows', 'followers']);
+    
+        return view('profile.show', compact('user', 'tweets'));
+    }
+  
 
 
     /**
